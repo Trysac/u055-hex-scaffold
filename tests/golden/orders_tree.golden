@@ -1,0 +1,16 @@
+.
+|-- orders/
+|   |-- __init__.py
+|   |-- adapters/
+|   |   |-- __init__.py
+|   |   `-- in_memory.py
+|   |-- application/
+|   |   |-- __init__.py
+|   |   |-- ports.py
+|   |   `-- service.py
+|   `-- domain/
+|       |-- __init__.py
+|       |-- errors.py
+|       `-- model.py
+`-- tests/
+    `-- test_orders_service.py

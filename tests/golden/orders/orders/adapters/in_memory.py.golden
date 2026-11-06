@@ -1,0 +1,30 @@
+"""In-memory adapter, useful for tests and prototypes."""
+
+from __future__ import annotations
+
+from collections.abc import Sequence
+
+from orders.domain.errors import NotFoundError
+from orders.domain.model import Order
+
+
+class InMemoryOrderRepository:
+    """Dict-backed implementation of ``OrderRepository``."""
+
+    def __init__(self) -> None:
+        self._items: dict[str, Order] = {}
+
+    def get(self, entity_id: str) -> Order:
+        """Return the entity or raise ``NotFoundError``."""
+        try:
+            return self._items[entity_id]
+        except KeyError:
+            raise NotFoundError(entity_id) from None
+
+    def add(self, entity: Order) -> None:
+        """Store or replace the entity."""
+        self._items[entity.id] = entity
+
+    def list(self) -> Sequence[Order]:
+        """Return all entities sorted by id."""
+        return [self._items[key] for key in sorted(self._items)]

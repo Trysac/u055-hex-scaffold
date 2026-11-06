@@ -19,6 +19,9 @@ classifiers = [
 ]
 dependencies = []
 
+[project.scripts]
+hex-scaffold = "hex_scaffold.__main__:main"
+
 [project.urls]
 Homepage = "https://github.com/Trysac/u055-hex-scaffold"
 Source = "https://github.com/Trysac/u055-hex-scaffold"
