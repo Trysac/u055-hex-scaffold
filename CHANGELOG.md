@@ -9,4 +9,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Added `hex-scaffold`: `plan_module`, `write_plan`, `render_tree` and a `new`/`layout` CLI that generate a byte-stable, tested hexagonal Python module (domain, port, service, in-memory adapter, tests).
 - Initial project structure from the factory utility template.

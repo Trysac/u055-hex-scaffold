@@ -2,27 +2,24 @@
 
 ## Purpose
 
-`trysac-hex-scaffold` is a small, dependency-free Python library: CLI that generates a hexagonal module (domain, port, application service, in-memory adapter, tests) as byte-stable, importable Python
+`trysac-hex-scaffold` is a small, dependency-free Python library (import name `hex_scaffold`) with a CLI that generates a hexagonal (ports and adapters) module as byte-stable, importable Python.
 
 ## Shape
 
 ```text
-caller code --> hex_scaffold (public API in __init__.py)
-                    |
-                    +-- pure functions, no I/O, no global state
+caller code / CLI --> hex_scaffold (public API in __init__.py)
+                          |
+                          +-- planner.py  (validate names, build PlannedFile list)
+                          +-- _templates.py (source templates for the 10 files)
+                          +-- tree.py     (ASCII tree rendering, no I/O)
+                          +-- writer.py   (the only module that writes to disk)
 ```
 
-- **Public API**: the names listed in `__all__` of `src/hex_scaffold/__init__.py`. Anything else is
-  internal and may change without a major version.
-- **Errors**: invalid input raises built-in exceptions (`ValueError`, `TypeError`) with a clear
-  message; the library never prints or exits.
-- **Side effects**: none. If a feature needs I/O, isolate it in its own module behind a small
-  interface and record the choice in an ADR.
-
-## Quality contract
-
-`scripts/check.py` is the single definition of the gates; `fabrica.json` tells the factory and CI
-how to run it. See [TESTING.md](TESTING.md).
+- **Public API**: the names listed in `__all__` of `src/hex_scaffold/__init__.py`: `ErrorCode`, `PlannedFile`, `ScaffoldError`, `__version__`, `plan_module`, `render_tree`, `write_plan`.
+- **Generated layers**: the domain imports nothing from application or adapters; the application depends only on the domain and on its port Protocol; adapters implement the ports.
+- **Errors**: invalid input raises `ScaffoldError` with a stable code and, where relevant, the affected paths.
+- **Logging**: `logging.getLogger(__name__)` with a `NullHandler`; the library never configures logging.
+- **Side effects**: only `write_plan` touches the file system. The CLI prints to stdout and stderr.
 
 ## Decisions
 

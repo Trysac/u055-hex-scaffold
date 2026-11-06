@@ -1,0 +1,7 @@
+"""Adapters layer: implementations of the application ports."""
+
+from __future__ import annotations
+
+from orders.adapters.in_memory import InMemoryOrderRepository
+
+__all__ = ["InMemoryOrderRepository"]

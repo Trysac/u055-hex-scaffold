@@ -1,0 +1,21 @@
+"""Ports: the interfaces the application needs from the outside world."""
+
+from __future__ import annotations
+
+from collections.abc import Sequence
+from typing import Protocol
+
+from orders.domain.model import Order
+
+
+class OrderRepository(Protocol):
+    """Storage port for the domain entity."""
+
+    def get(self, entity_id: str) -> Order:
+        """Return the entity or raise ``NotFoundError``."""
+
+    def add(self, entity: Order) -> None:
+        """Store or replace the entity."""
+
+    def list(self) -> Sequence[Order]:
+        """Return all entities sorted by id."""

@@ -1,0 +1,11 @@
+"""Domain errors."""
+
+from __future__ import annotations
+
+
+class NotFoundError(Exception):
+    """Raised when an entity does not exist."""
+
+    def __init__(self, entity_id: str) -> None:
+        super().__init__(f"not found: {entity_id}")
+        self.entity_id = entity_id

@@ -1,0 +1,29 @@
+"""Application service: use cases written against the port."""
+
+from __future__ import annotations
+
+from collections.abc import Sequence
+
+from orders.application.ports import OrderRepository
+from orders.domain.model import Order
+
+
+class OrderService:
+    """Use cases; the storage port is injected through the constructor."""
+
+    def __init__(self, repository: OrderRepository) -> None:
+        self._repository = repository
+
+    def create(self, entity_id: str) -> Order:
+        """Create, store and return a new entity."""
+        entity = Order(id=entity_id)
+        self._repository.add(entity)
+        return entity
+
+    def get(self, entity_id: str) -> Order:
+        """Return the entity or raise ``NotFoundError``."""
+        return self._repository.get(entity_id)
+
+    def list_all(self) -> Sequence[Order]:
+        """Return every entity sorted by id."""
+        return self._repository.list()

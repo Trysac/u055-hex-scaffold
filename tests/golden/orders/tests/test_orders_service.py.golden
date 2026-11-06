@@ -1,0 +1,36 @@
+"""Tests for the orders service; they use only the in-memory adapter."""
+
+from __future__ import annotations
+
+from orders.adapters.in_memory import InMemoryOrderRepository
+from orders.application.service import OrderService
+from orders.domain.errors import NotFoundError
+from orders.domain.model import Order
+
+
+def make_service() -> OrderService:
+    return OrderService(InMemoryOrderRepository())
+
+
+def test_create_then_get() -> None:
+    service = make_service()
+    created = service.create("a1")
+    assert created == Order(id="a1")
+    assert service.get("a1") == created
+
+
+def test_get_missing_raises_not_found() -> None:
+    service = make_service()
+    try:
+        service.get("missing")
+    except NotFoundError as error:
+        assert error.entity_id == "missing"
+    else:
+        raise AssertionError("NotFoundError was not raised")
+
+
+def test_list_all_is_sorted_by_id() -> None:
+    service = make_service()
+    service.create("b")
+    service.create("a")
+    assert [item.id for item in service.list_all()] == ["a", "b"]
